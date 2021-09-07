@@ -20,4 +20,14 @@ private slots:
 
 private:
     Ui::MainWindow* ui;
+
+    enum class Turn {
+        Human,
+        AI
+    };
+
+    Turn m_turn { Turn::Human }; // TODO: make this random
+
+    void flipTurn();
+    QString currentTurnSymbol() const noexcept;
 };
