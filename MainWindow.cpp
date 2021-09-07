@@ -1,6 +1,8 @@
 #include "MainWindow.hpp"
 #include "./ui_MainWindow.h"
 
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,6 +18,13 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->pb6, &QPushButton::clicked, this, &MainWindow::handleMove);
     connect(ui->pb7, &QPushButton::clicked, this, &MainWindow::handleMove);
     connect(ui->pb8, &QPushButton::clicked, this, &MainWindow::handleMove);
+
+    connect(&m_game, &Game::AIelaborationFinished, this, &MainWindow::updateAfterAImove);
+    connect(&m_game, &Game::gameFinished, this, [&]() {
+        QMessageBox::information(this, "Game Finished",
+            "No more moves available",
+            QMessageBox::Ok);
+    });
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -31,4 +40,26 @@ void MainWindow::handleMove()
     obj->setText(m_game.currentTurnSymbol());
     auto cell = obj->objectName().right(1).toUInt();
     m_game.setHumanMove(cell);
+}
+
+void MainWindow::updateAfterAImove(quint8 cell)
+{
+    if (cell == 0)
+        ui->pb0->setText(m_game.currentTurnSymbol());
+    if (cell == 1)
+        ui->pb1->setText(m_game.currentTurnSymbol());
+    if (cell == 2)
+        ui->pb2->setText(m_game.currentTurnSymbol());
+    if (cell == 3)
+        ui->pb3->setText(m_game.currentTurnSymbol());
+    if (cell == 4)
+        ui->pb4->setText(m_game.currentTurnSymbol());
+    if (cell == 5)
+        ui->pb5->setText(m_game.currentTurnSymbol());
+    if (cell == 6)
+        ui->pb6->setText(m_game.currentTurnSymbol());
+    if (cell == 7)
+        ui->pb7->setText(m_game.currentTurnSymbol());
+    if (cell == 8)
+        ui->pb8->setText(m_game.currentTurnSymbol());
 }

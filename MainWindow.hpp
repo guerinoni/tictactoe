@@ -19,6 +19,7 @@ public:
 
 private slots:
     void handleMove();
+    void updateAfterAImove(quint8 cell);
 
 private:
     Ui::MainWindow* ui;
