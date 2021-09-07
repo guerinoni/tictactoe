@@ -28,27 +28,7 @@ void MainWindow::handleMove()
         return;
     }
 
-    obj->setText(currentTurnSymbol());
-    flipTurn();
-}
-
-void MainWindow::flipTurn()
-{
-    if (m_turn == Turn::Human)
-        m_turn = Turn::AI;
-    else if (m_turn == Turn::AI)
-        m_turn = Turn::Human;
-    else
-        assert(false);
-}
-
-QString MainWindow::currentTurnSymbol() const noexcept
-{
-    if (m_turn == Turn::Human)
-        return "X";
-    if (m_turn == Turn::AI)
-        return "O";
-
-    assert(false);
-    return "";
+    obj->setText(m_game.currentTurnSymbol());
+    auto cell = obj->objectName().right(1).toUInt();
+    m_game.setHumanMove(cell);
 }
