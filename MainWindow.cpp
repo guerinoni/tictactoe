@@ -6,6 +6,24 @@ MainWindow::MainWindow(QWidget* parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->pb0, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb1, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb2, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb3, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb4, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb5, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb6, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb7, &QPushButton::clicked, this, &MainWindow::handleMove);
+    connect(ui->pb8, &QPushButton::clicked, this, &MainWindow::handleMove);
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::handleMove()
+{
+    auto* obj = qobject_cast<QPushButton*>(sender());
+    if (obj) {
+        qDebug() << "ok" << obj->objectName();
+    }
+}
