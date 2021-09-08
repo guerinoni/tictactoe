@@ -1,8 +1,6 @@
 #include "Game.hpp"
 
 #include <QRandomGenerator>
-#include <QTimer>
-#include <QtDebug>
 
 QString Game::currentTurnSymbol() const noexcept
 {
@@ -60,7 +58,7 @@ void Game::makeAImove()
         return;
     }
 
-    QTimer::singleShot(100, this, &Game::flipTurn); // FIXME: clean this
+    flipTurn();
 }
 
 QPair<bool, Game::GameFinished> Game::isGameFinished()
