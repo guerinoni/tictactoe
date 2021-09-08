@@ -20,10 +20,21 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->pb8, &QPushButton::clicked, this, &MainWindow::handleMove);
 
     connect(&m_game, &Game::AIelaborationFinished, this, &MainWindow::updateAfterAImove);
-    connect(&m_game, &Game::gameFinished, this, [&]() {
-        QMessageBox::information(this, "Game Finished",
-            "No more moves available",
-            QMessageBox::Ok);
+    connect(&m_game, &Game::gameFinished, this, [&](Game::GameFinished mode) {
+        auto modeMsg = "";
+        switch (mode) {
+        case Game::GameFinished::EndOfMoves:
+            modeMsg = "No more moves available";
+            break;
+        case Game::GameFinished::Human:
+            modeMsg = "You win, good job";
+            break;
+        case Game::GameFinished::AI:
+            modeMsg = "AI wins :P";
+            break;
+        }
+
+        QMessageBox::information(this, "Game Finished", modeMsg, QMessageBox::Ok);
     });
 }
 
