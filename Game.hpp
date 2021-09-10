@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QHash>
+#include <QMap>
 #include <QObject>
 
 class Game : public QObject {
@@ -30,9 +30,15 @@ private:
     Turn m_turn { Turn::Human }; // TODO: make this random
 
     QList<QChar> m_board { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
-    QHash<quint8, bool> m_freeCells { { 0, true }, { 1, true }, { 2, true }, { 3, true }, { 4, true }, { 5, true }, { 6, true }, { 7, true }, { 8, true } };
+    QMap<quint8, bool> m_freeCells { { 0, true }, { 1, true }, { 2, true }, { 3, true }, { 4, true }, { 5, true }, { 6, true }, { 7, true }, { 8, true } };
 
     void flipTurn();
     void makeAImove();
     QPair<bool, GameFinished> isGameFinished();
+
+    qint32 evaluateMove();
+    quint32 evaluateWin(GameFinished whoWin);
+    quint8 possibleWinFor(Game::Turn player);
+    qint32 minVal(quint8 depth);
+    qint32 maxVal(quint8 depth);
 };
