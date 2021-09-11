@@ -2,12 +2,15 @@
 #include "./ui_MainWindow.h"
 
 #include <QMessageBox>
+#include <QtDebug>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setWindowTitle("tictactoe");
 
     connect(ui->pb0, &QPushButton::clicked, this, &MainWindow::handleMove);
     connect(ui->pb1, &QPushButton::clicked, this, &MainWindow::handleMove);
