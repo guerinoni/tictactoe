@@ -3,6 +3,12 @@
 #include <QRandomGenerator>
 #include <QtDebug>
 
+Game::Game(QList<QChar> board, QList<quint8> freeCells)
+    : m_board { std::move(board) }
+    , m_freeCells { std::move(freeCells) }
+{
+}
+
 QString Game::currentTurnSymbol() const noexcept
 {
     if (m_turn == Turn::Human)
@@ -81,6 +87,11 @@ QPair<bool, Game::GameFinished> Game::isGameFinished()
     }
 
     return qMakePair<bool, Game::GameFinished>(false, Game::GameFinished::EndOfMoves);
+}
+
+QList<QChar> Game::dumpBoard() const
+{
+    return m_board;
 }
 
 qint32 Game::evaluateMove()

@@ -6,6 +6,9 @@ class Game : public QObject {
     Q_OBJECT
 
 public:
+    Game() = default;
+    explicit Game(QList<QChar> board, QList<quint8> freeCells);
+
     [[nodiscard]] QString currentTurnSymbol() const noexcept;
 
     void setHumanMove(quint8 cell);
@@ -15,6 +18,11 @@ public:
         AI,
         EndOfMoves,
     };
+
+    void makeAImove();
+    QPair<bool, GameFinished> isGameFinished();
+
+    QList<QChar> dumpBoard() const;
 
 signals:
     void AIelaborationFinished(quint8 cell);
@@ -32,8 +40,6 @@ private:
     QList<quint8> m_freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
     void flipTurn();
-    void makeAImove();
-    QPair<bool, GameFinished> isGameFinished();
 
     qint32 evaluateMove();
     qint32 evaluateWin(GameFinished whoWin);
