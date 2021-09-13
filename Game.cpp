@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include <QRandomGenerator>
+#include <QtDebug>
 
 QString Game::currentTurnSymbol() const noexcept
 {
@@ -18,11 +19,11 @@ void Game::setHumanMove(quint8 cell)
     if (m_turn != Turn::Human)
         return;
 
-    m_freeCells.remove(cell);
+    auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
+    m_freeCells.removeOne(*item);
     m_board[cell] = currentTurnSymbol().at(0);
 
-    auto end
-        = isGameFinished();
+    auto end = isGameFinished();
     if (end.first) {
         emit gameFinished(end.second);
         return;
@@ -47,10 +48,11 @@ void Game::makeAImove()
     if (m_turn != Turn::AI)
         return;
 
-    auto cell = m_freeCells.begin().key();
-    m_freeCells.remove(cell);
-    m_board[cell] = currentTurnSymbol().at(0);
-    emit AIelaborationFinished(cell);
+    auto bestMove = maxVal(6);
+    m_freeCells.removeOne(bestMove.index);
+    m_board[bestMove.index] = currentTurnSymbol().at(0);
+
+    emit AIelaborationFinished(bestMove.index);
 
     auto end = isGameFinished();
     if (end.first) {
@@ -86,12 +88,12 @@ qint32 Game::evaluateMove()
     return possibleWinFor(Game::Turn::AI) - possibleWinFor(Game::Turn::Human);
 }
 
-quint32 Game::evaluateWin(GameFinished whoWin)
+qint32 Game::evaluateWin(GameFinished whoWin)
 {
     if (whoWin == GameFinished::Human)
-        return -1000;
+        return -10;
     if (whoWin == GameFinished::AI)
-        return 1000;
+        return 10;
     return 0;
 }
 
@@ -128,46 +130,62 @@ quint8 Game::possibleWinFor(Game::Turn player)
 // depth is how many move in advance we are trying to calculate.
 // If the game is finished the returned value is multiplied with the current depth where is found in order
 // have a different wight based on what depth found winner moves. (+1 because last depth is 0 and any number *0...)
-qint32 Game::minVal(quint8 depth)
+Game::CalculatedMove Game::minVal(quint8 depth)
 {
     auto finished = isGameFinished();
     if (finished.first)
-        return (depth + 1) * evaluateWin(finished.second);
+        return CalculatedMove { (depth + 1) * evaluateWin(finished.second), 0 };
 
     if (depth == 0) // limit of max depth that can be calculated, return estimation of wins
-        return evaluateMove();
+        return { evaluateMove(), 0 };
 
     auto min = std::numeric_limits<qint32>::max();
-    for (auto it = m_freeCells.begin(); it != m_freeCells.end(); ++it) {
-        auto cell = it.key();
-        m_freeCells.remove(cell);
-        m_board[cell] = 'O';
-        min = std::min(min, maxVal(depth - 1));
+    auto freeCellsCpy = m_freeCells;
+    quint8 bestMoveIndex;
+    for (auto it = freeCellsCpy.begin(); it != freeCellsCpy.end(); ++it) {
+        auto cell = *it;
+        auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
+        m_freeCells.removeOne(*item);
+        m_board[cell] = 'X';
+        auto currentMove = maxVal(depth - 1);
+        if (currentMove.value < min) {
+            min = currentMove.value;
+            bestMoveIndex = cell;
+        }
+
         m_board[cell] = ' ';
-        m_freeCells[cell] = true;
+        m_freeCells.push_back(cell);
     }
 
-    return min;
+    return { min, bestMoveIndex };
 }
 
-qint32 Game::maxVal(quint8 depth)
+Game::CalculatedMove Game::maxVal(quint8 depth)
 {
     auto finished = isGameFinished();
     if (finished.first)
-        return (depth + 1) * evaluateWin(finished.second);
+        return CalculatedMove { (depth + 1) * evaluateWin(finished.second), 0 };
 
-    if (depth == 0)
-        return evaluateMove();
+    if (depth == 0) // limit of max depth that can be calculated, return estimation of wins
+        return { evaluateMove(), 0 };
 
-    auto max = std::numeric_limits<qint32>::max();
-    for (auto it = m_freeCells.begin(); it != m_freeCells.end(); ++it) {
-        auto cell = it.key();
-        m_freeCells.remove(cell);
+    auto max = std::numeric_limits<qint32>::min();
+    auto freeCellsCpy = m_freeCells;
+    quint8 bestMoveIndex;
+    for (auto it = freeCellsCpy.begin(); it != freeCellsCpy.end(); ++it) {
+        auto cell = *it;
+        auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
+        m_freeCells.removeOne(*item);
         m_board[cell] = 'O';
-        max = std::max(max, minVal(depth - 1));
+        auto currentMove = minVal(depth - 1);
+        if (currentMove.value > max) {
+            max = currentMove.value;
+            bestMoveIndex = cell;
+        }
+
         m_board[cell] = ' ';
-        m_freeCells[cell] = true;
+        m_freeCells.push_back(cell);
     }
 
-    return max;
+    return { max, bestMoveIndex };
 }
