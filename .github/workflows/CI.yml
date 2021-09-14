@@ -1,0 +1,38 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  Build:
+    strategy:
+      matrix:
+        qt_version: [5.15.2]
+        platform: [ubuntu-latest]
+        arch: [x64, x86]
+      fail-fast: false
+    runs-on: ${{ matrix.platform }}
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ matrix.qt_version }}
+          arch: ${{ matrix.qtarch }}
+          cached: 'false'
+
+      - name: build
+        shell: bash
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+
+      - name: tests
+        shell: bash
+        run: |
+          cd build
+          ctest
