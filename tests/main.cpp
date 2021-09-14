@@ -2,17 +2,12 @@
 
 #include <QtDebug>
 
-enum TestResult {
-    PASSED,
-    FAILED
-};
-
-TestResult case1()
+int closeMatchForAI()
 {
     QList<QChar> board {
+        'O', 'X', 'O',
         'X', 'X', 'O',
-        'X', 'X', 'O',
-        'O', ' ', ' '
+        'X', ' ', ' '
     };
     QList<quint8> freeCells { 7, 8 };
     Game g(board, freeCells);
@@ -23,17 +18,39 @@ TestResult case1()
     if (output != board) {
         qDebug() << "dump output" << output;
         qDebug() << "expected" << board;
-        return FAILED;
+        return 1;
     }
 
     auto finished = g.isGameFinished();
-    return finished.first && finished.second == Game::GameFinished::AI ? PASSED : FAILED;
+    return (finished.first && finished.second == Game::GameFinished::AI) ? 0 : 1;
+}
+
+int bestMoveIsCentralCell()
+{
+    QList<QChar> board {
+        ' ', 'X', ' ',
+        ' ', ' ', ' ',
+        ' ', ' ', ' '
+    };
+    QList<quint8> freeCells { 0, 2, 3, 4, 5, 6, 7, 8 };
+    Game g(board, freeCells);
+    g.makeAImove();
+
+    board[4] = 'O';
+    auto output = g.dumpBoard();
+    if (output != board) {
+        qDebug() << "dump output" << output;
+        qDebug() << "expected" << board;
+        return 1;
+    }
+
+    auto finished = g.isGameFinished();
+    return finished.first == false;
 }
 
 int main(int argc, char* argv[])
 {
-    TestResult ret = PASSED;
-    ret = case1() == PASSED ? PASSED : FAILED;
-    ret == PASSED ? qDebug() << "all tests PASSED" : qDebug() << "test FAILED";
+    int ret = 0 && closeMatchForAI() && bestMoveIsCentralCell();
+    ret == 0 ? qDebug() << "all tests PASSED" : qDebug() << "test FAILED";
     return ret;
 }
