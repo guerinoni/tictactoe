@@ -1,5 +1,7 @@
 # tictactoe
 
+[![CI](https://github.com/guerinoni/tictactoe/actions/workflows/CI.yml/badge.svg)](https://github.com/guerinoni/tictactoe/actions/workflows/CI.yml)
+
 Game of tic tac toe with a strong AI.
 
 ![](./docs/screenshot.png)
