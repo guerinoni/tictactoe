@@ -51,7 +51,7 @@ void MainWindow::handleMove()
         return;
     }
 
-    obj->setText(m_game.currentTurnSymbol());
+    obj->setText(m_game.kHumanSymbol);
     auto cell = obj->objectName().right(1).toUInt();
     m_game.setHumanMove(cell);
 }
@@ -59,21 +59,21 @@ void MainWindow::handleMove()
 void MainWindow::updateAfterAImove(quint8 cell)
 {
     if (cell == 0)
-        ui->pb0->setText(m_game.currentTurnSymbol());
+        ui->pb0->setText(m_game.kAiSymbol);
     if (cell == 1)
-        ui->pb1->setText(m_game.currentTurnSymbol());
+        ui->pb1->setText(m_game.kAiSymbol);
     if (cell == 2)
-        ui->pb2->setText(m_game.currentTurnSymbol());
+        ui->pb2->setText(m_game.kAiSymbol);
     if (cell == 3)
-        ui->pb3->setText(m_game.currentTurnSymbol());
+        ui->pb3->setText(m_game.kAiSymbol);
     if (cell == 4)
-        ui->pb4->setText(m_game.currentTurnSymbol());
+        ui->pb4->setText(m_game.kAiSymbol);
     if (cell == 5)
-        ui->pb5->setText(m_game.currentTurnSymbol());
+        ui->pb5->setText(m_game.kAiSymbol);
     if (cell == 6)
-        ui->pb6->setText(m_game.currentTurnSymbol());
+        ui->pb6->setText(m_game.kAiSymbol);
     if (cell == 7)
-        ui->pb7->setText(m_game.currentTurnSymbol());
+        ui->pb7->setText(m_game.kAiSymbol);
     if (cell == 8)
-        ui->pb8->setText(m_game.currentTurnSymbol());
+        ui->pb8->setText(m_game.kAiSymbol);
 }

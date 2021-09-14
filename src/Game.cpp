@@ -9,25 +9,11 @@ Game::Game(QList<QChar> board, QList<quint8> freeCells)
 {
 }
 
-QString Game::currentTurnSymbol() const noexcept
-{
-    if (m_turn == Turn::Human)
-        return "X";
-    if (m_turn == Turn::AI)
-        return "O";
-
-    assert(false);
-    return "";
-}
-
 void Game::setHumanMove(quint8 cell)
 {
-    if (m_turn != Turn::Human)
-        return;
-
     auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
     m_freeCells.removeOne(*item);
-    m_board[cell] = currentTurnSymbol().at(0);
+    m_board[cell] = kHumanSymbol;
 
     auto end = isGameFinished();
     if (end.first) {
@@ -35,28 +21,14 @@ void Game::setHumanMove(quint8 cell)
         return;
     }
 
-    flipTurn();
     makeAImove();
-}
-
-void Game::flipTurn()
-{
-    if (m_turn == Turn::Human)
-        m_turn = Turn::AI;
-    else if (m_turn == Turn::AI)
-        m_turn = Turn::Human;
-    else
-        assert(false);
 }
 
 void Game::makeAImove()
 {
-    if (m_turn != Turn::AI)
-        return;
-
     auto bestMove = maxVal(6);
     m_freeCells.removeOne(bestMove.index);
-    m_board[bestMove.index] = currentTurnSymbol().at(0);
+    m_board[bestMove.index] = kAiSymbol;
 
     emit AIelaborationFinished(bestMove.index);
 
@@ -65,21 +37,46 @@ void Game::makeAImove()
         emit gameFinished(end.second);
         return;
     }
-
-    flipTurn();
 }
 
 QPair<bool, Game::GameFinished> Game::isGameFinished()
 {
-    if ((m_board[0] != ' ' && m_board[0] == m_board[1] && m_board[1] == m_board[2])
-        || (m_board[0] != ' ' && m_board[0] == m_board[3] && m_board[3] == m_board[6])
-        || (m_board[0] != ' ' && m_board[0] == m_board[4] && m_board[4] == m_board[8])
-        || (m_board[1] != ' ' && m_board[1] == m_board[4] && m_board[4] == m_board[7])
-        || (m_board[2] != ' ' && m_board[2] == m_board[5] && m_board[5] == m_board[8])
-        || (m_board[2] != ' ' && m_board[2] == m_board[4] && m_board[4] == m_board[6])
-        || (m_board[3] != ' ' && m_board[3] == m_board[4] && m_board[4] == m_board[5])
-        || (m_board[6] != ' ' && m_board[6] == m_board[7] && m_board[7] == m_board[8])) {
-        return qMakePair<bool, Game::GameFinished>(true, static_cast<Game::GameFinished>(m_turn));
+    if ((m_board[0] == m_board[1] && m_board[1] == m_board[2])
+        || (m_board[0] == m_board[3] && m_board[3] == m_board[6])
+        || (m_board[0] == m_board[4] && m_board[4] == m_board[8])) {
+        if (m_board[0] == kHumanSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::Human);
+        if (m_board[0] == kAiSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::AI);
+    }
+
+    if (m_board[1] == m_board[4] && m_board[4] == m_board[7]) {
+        if (m_board[1] == kHumanSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::Human);
+        if (m_board[1] == kAiSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::AI);
+    }
+
+    if ((m_board[2] == m_board[5] && m_board[5] == m_board[8])
+        || (m_board[2] == m_board[4] && m_board[4] == m_board[6])) {
+        if (m_board[2] == kHumanSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::Human);
+        if (m_board[2] == kAiSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::AI);
+    }
+
+    if (m_board[3] == m_board[4] && m_board[4] == m_board[5]) {
+        if (m_board[3] == kHumanSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::Human);
+        if (m_board[3] == kAiSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::AI);
+    }
+
+    if (m_board[6] == m_board[7] && m_board[7] == m_board[8]) {
+        if (m_board[6] == kHumanSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::Human);
+        if (m_board[6] == kAiSymbol)
+            return qMakePair<bool, Game::GameFinished>(true, GameFinished::AI);
     }
 
     if (m_freeCells.empty()) {
@@ -110,7 +107,7 @@ qint32 Game::evaluateWin(GameFinished whoWin)
 
 quint8 Game::possibleWinFor(Game::Turn player)
 {
-    QChar symbolOpponent = player == Game::Turn::Human ? 'O' : 'X';
+    QChar symbolOpponent = player == Game::Turn::Human ? kAiSymbol : kHumanSymbol;
     quint8 counterPossibleWin = 0;
 
     // horizontal possible wins
@@ -157,7 +154,7 @@ Game::CalculatedMove Game::minVal(quint8 depth)
         auto cell = *it;
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
         m_freeCells.removeOne(*item);
-        m_board[cell] = 'X';
+        m_board[cell] = kHumanSymbol;
         auto currentMove = maxVal(depth - 1);
         if (currentMove.value < min) {
             min = currentMove.value;
@@ -187,7 +184,7 @@ Game::CalculatedMove Game::maxVal(quint8 depth)
         auto cell = *it;
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
         m_freeCells.removeOne(*item);
-        m_board[cell] = 'O';
+        m_board[cell] = kAiSymbol;
         auto currentMove = minVal(depth - 1);
         if (currentMove.value > max) {
             max = currentMove.value;

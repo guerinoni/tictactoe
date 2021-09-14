@@ -9,8 +9,6 @@ public:
     Game() = default;
     explicit Game(QList<QChar> board, QList<quint8> freeCells);
 
-    [[nodiscard]] QString currentTurnSymbol() const noexcept;
-
     void setHumanMove(quint8 cell);
 
     enum class GameFinished {
@@ -24,6 +22,9 @@ public:
 
     QList<QChar> dumpBoard() const;
 
+    static constexpr QChar kHumanSymbol { 'X' };
+    static constexpr QChar kAiSymbol { 'O' };
+
 signals:
     void AIelaborationFinished(quint8 cell);
     void gameFinished(GameFinished mode);
@@ -34,12 +35,8 @@ private:
         AI
     };
 
-    Turn m_turn { Turn::Human }; // TODO: make this random
-
     QList<QChar> m_board { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
     QList<quint8> m_freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-
-    void flipTurn();
 
     qint32 evaluateMove();
     qint32 evaluateWin(GameFinished whoWin);
