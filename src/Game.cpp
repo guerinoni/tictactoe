@@ -26,7 +26,7 @@ void Game::setHumanMove(quint8 cell)
 
 void Game::makeAImove()
 {
-    auto bestMove = maxVal(6);
+    auto bestMove = maxVal(5);
     m_freeCells.removeOne(bestMove.index);
     m_board[bestMove.index] = kAiSymbol;
 
@@ -35,7 +35,6 @@ void Game::makeAImove()
     auto end = isGameFinished();
     if (end.first) {
         emit gameFinished(end.second);
-        return;
     }
 }
 

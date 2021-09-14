@@ -1,9 +1,19 @@
 #include "../src/Game.hpp"
 
 #include <QtDebug>
+#include <QtTest>
 
-int closeMatchForAI()
+class MatchDecision3x3 : public QObject {
+    Q_OBJECT
+
+private slots:
+    void only1moveToWin();
+    void checkBestMoveAfterFirstMoveOfHuman();
+};
+
+void MatchDecision3x3::only1moveToWin()
 {
+    // TODO: add other case for 1 move remaining.
     QList<QChar> board {
         'O', 'X', 'O',
         'X', 'X', 'O',
@@ -15,17 +25,14 @@ int closeMatchForAI()
 
     board[8] = 'O';
     auto output = g.dumpBoard();
-    if (output != board) {
-        qDebug() << "dump output" << output;
-        qDebug() << "expected" << board;
-        return 1;
-    }
+    QCOMPARE(output, board);
 
     auto finished = g.isGameFinished();
-    return (finished.first && finished.second == Game::GameFinished::AI) ? 0 : 1;
+    QVERIFY(finished.first);
+    QCOMPARE(finished.second, Game::GameFinished::AI);
 }
 
-int bestMoveIsCentralCell()
+void MatchDecision3x3::checkBestMoveAfterFirstMoveOfHuman()
 {
     QList<QChar> board {
         ' ', 'X', ' ',
@@ -38,19 +45,11 @@ int bestMoveIsCentralCell()
 
     board[4] = 'O';
     auto output = g.dumpBoard();
-    if (output != board) {
-        qDebug() << "dump output" << output;
-        qDebug() << "expected" << board;
-        return 1;
-    }
+    QCOMPARE(output, board);
 
     auto finished = g.isGameFinished();
-    return finished.first == false;
+    QVERIFY(!finished.first);
 }
 
-int main(int argc, char* argv[])
-{
-    int ret = 0 && closeMatchForAI() && bestMoveIsCentralCell();
-    ret == 0 ? qDebug() << "all tests PASSED" : qDebug() << "test FAILED";
-    return ret;
-}
+QTEST_MAIN(MatchDecision3x3)
+#include "matchDecision3x3.moc"
