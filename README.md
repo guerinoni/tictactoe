@@ -2,6 +2,8 @@
 
 Game of tic tac toe with a strong AI.
 
+![](./docs/screenshot.png)
+
 ## Build
 
 ```bash
@@ -30,4 +32,3 @@ ctest
 - [ ] setting for grid size
 - [ ] coverage for tests
 - [ ] how many symbol in a row for win (classic tictactoe = 3)
-
