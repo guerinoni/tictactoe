@@ -24,5 +24,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
 
+    QAction* m_quit;
+
     Game m_game;
 };

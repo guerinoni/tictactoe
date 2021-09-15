@@ -1,12 +1,14 @@
 #include "MainWindow.hpp"
 #include "./ui_MainWindow.h"
 
+#include <QAction>
 #include <QMessageBox>
 #include <QtDebug>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_quit { new QAction { "Quit", this } }
 {
     ui->setupUi(this);
 
@@ -21,6 +23,10 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->pb6, &QPushButton::clicked, this, &MainWindow::handleMove);
     connect(ui->pb7, &QPushButton::clicked, this, &MainWindow::handleMove);
     connect(ui->pb8, &QPushButton::clicked, this, &MainWindow::handleMove);
+
+    m_quit->setShortcut(QKeySequence::Quit);
+    connect(m_quit, &QAction::triggered, this, [&]() { qApp->quit(); });
+    ui->menubar->addActions({ m_quit });
 
     connect(&m_game, &Game::AIelaborationFinished, this, &MainWindow::updateAfterAImove);
     connect(&m_game, &Game::gameFinished, this, [&](Game::GameFinished mode) {
