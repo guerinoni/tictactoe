@@ -34,3 +34,4 @@ ctest
 - [ ] setting for grid size
 - [ ] coverage for tests
 - [ ] how many symbol in a row for win (classic tictactoe = 3)
+- [ ] add support for multithreading algorithmgi
