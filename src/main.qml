@@ -11,6 +11,13 @@ Window {
 
     property bool human_turn: true
 
+    Connections {
+        target: game
+        onAiElaborationFinished: {
+            human_turn = true
+            cells.itemAt(cell).state = "O"
+        }
+    }
 
     Grid {
         id: board
@@ -33,6 +40,7 @@ Window {
                     {
                         state = "X"
                         human_turn = false
+                        game.setHumanMove(index)
                     }
                 }
             }
