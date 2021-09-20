@@ -30,7 +30,7 @@ void Game::makeAImove()
     m_freeCells.removeOne(bestMove.index);
     m_board[bestMove.index] = kAiSymbol;
 
-    emit AIelaborationFinished(bestMove.index);
+    emit aiElaborationFinished(bestMove.index);
 
     auto end = isGameFinished();
     if (end.first) {

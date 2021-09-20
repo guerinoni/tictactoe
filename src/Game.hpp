@@ -9,7 +9,7 @@ public:
     Game() = default;
     explicit Game(QList<QChar> board, QList<quint8> freeCells);
 
-    void setHumanMove(quint8 cell);
+    Q_INVOKABLE void setHumanMove(quint8 cell);
 
     enum class GameFinished {
         Human,
@@ -26,7 +26,7 @@ public:
     static constexpr QChar kAiSymbol { 'O' };
 
 signals:
-    void AIelaborationFinished(quint8 cell);
+    void aiElaborationFinished(quint8 cell);
     void gameFinished(GameFinished mode);
 
 private:
