@@ -16,6 +16,7 @@ public:
         AI,
         EndOfMoves,
     };
+    Q_ENUMS(GameFinished)
 
     void makeAImove();
     QPair<bool, GameFinished> isGameFinished();
