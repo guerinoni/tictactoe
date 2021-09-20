@@ -12,6 +12,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    qmlRegisterUncreatableType<Game>("Game.enums", 1, 0, "GameFinishedEnum",
+                                            "Not creatable as it is an enum type.");
+
     Game game;
     engine.rootContext()->setContextProperty("game", &game);
 
