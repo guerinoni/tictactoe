@@ -1,11 +1,9 @@
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
-        MainWindow.cpp
-        MainWindow.hpp
-        MainWindow.ui
+        qml.qrc
         Game.cpp
         Game.hpp
 )
@@ -33,7 +31,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(tictactoe PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(tictactoe PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
 
 set_target_properties(tictactoe PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
