@@ -11,12 +11,9 @@ Window {
     height: 480
     title: qsTr("Tic Tac Toe")
 
-    property bool human_turn: true
-
     Connections {
         target: game
         onAiElaborationFinished: {
-            human_turn = true
             cells.itemAt(cell).state = "O"
         }
         onGameFinished: {
@@ -52,10 +49,9 @@ Window {
                 width: board.width / 3
                 height: board.height / 3
                 onClicked: {
-                    if(human_turn && state == "empty")
+                    if(game.isMoveAllowed(index))
                     {
                         state = "X"
-                        human_turn = false
                         game.setHumanMove(index)
                     }
                 }
