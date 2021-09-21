@@ -9,6 +9,7 @@ public:
     Game() = default;
     explicit Game(QList<QChar> board, QList<quint8> freeCells);
 
+    Q_INVOKABLE bool isMoveAllowed(quint8 cell);
     Q_INVOKABLE void setHumanMove(quint8 cell);
 
     enum class GameFinished {
@@ -38,6 +39,7 @@ private:
 
     QList<QChar> m_board { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
     QList<quint8> m_freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    Game::Turn m_turn = Game::Turn::Human;
 
     qint32 evaluateMove();
     qint32 evaluateWin(GameFinished whoWin);

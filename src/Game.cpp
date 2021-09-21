@@ -9,11 +9,17 @@ Game::Game(QList<QChar> board, QList<quint8> freeCells)
 {
 }
 
+bool Game::isMoveAllowed(quint8 cell)
+{
+    return m_freeCells.contains(cell) && m_turn == Game::Turn::Human;
+}
+
 void Game::setHumanMove(quint8 cell)
 {
     auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
     m_freeCells.removeOne(*item);
     m_board[cell] = kHumanSymbol;
+    m_turn = Game::Turn::AI;
 
     auto end = isGameFinished();
     if (end.first) {
@@ -31,6 +37,7 @@ void Game::makeAImove()
     m_board[bestMove.index] = kAiSymbol;
 
     emit aiElaborationFinished(bestMove.index);
+    m_turn = Game::Turn::Human;
 
     auto end = isGameFinished();
     if (end.first) {
