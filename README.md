@@ -4,7 +4,7 @@
 
 Game of tic tac toe with a strong AI.
 
-Suuport for Linux and macOS.
+Suuport for Linux, macOS and Windows.
 
 ![](./docs/screenshot.png)
 
