@@ -28,12 +28,3 @@ ctest
 1. Any kind of help is welcome (issue, comment, request, PR...).
 2. Make sure to run `./scripts/clang-format.sh` before PR.
 3. Enjoy.
-
-
-## Next cool features 
-
-- [ ] setting for difficult
-- [ ] setting for grid size
-- [ ] coverage for tests
-- [ ] how many symbol in a row for win (classic tictactoe = 3)
-- [ ] add support for multithreading algorithmgi
