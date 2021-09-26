@@ -22,6 +22,18 @@ cmake -build .
 ctest
 ```
 
+## Lint
+
+Run clang-format
+```
+./scripts/clang-format.sh
+```
+
+Run clang-tidy (pass build-dir-path)
+```
+./scripts/clang-tidy.sh ../build-tictactoe-Desktop_Qt6-Debug/
+```
+
 
 ## Contributing
 
