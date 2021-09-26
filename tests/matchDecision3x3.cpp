@@ -9,6 +9,7 @@ class MatchDecision3x3 : public QObject {
 private slots:
     void only1moveToWin();
     void checkBestMoveAfterFirstMoveOfHuman();
+    void preventHumanWin();
 };
 
 void MatchDecision3x3::only1moveToWin()
@@ -49,6 +50,63 @@ void MatchDecision3x3::checkBestMoveAfterFirstMoveOfHuman()
 
     auto finished = g.isGameFinished();
     QVERIFY(!finished.first);
+}
+
+void MatchDecision3x3::preventHumanWin()
+{
+    struct testCase {
+        QList<QChar> initialBoard;
+        QList<quint8> initialFreecells;
+        QList<QChar> expectedBoard;
+        bool expectedGameFinished;
+    };
+
+    QList<testCase> tests {
+        { { 'X', 'X', ' ', ' ', 'O', ' ', ' ', ' ', ' ' }, { 2, 3, 5, 6, 7, 8 }, {
+                                                                                     'X',
+                                                                                     'X',
+                                                                                     'O',
+                                                                                     ' ',
+                                                                                     'O',
+                                                                                     ' ',
+                                                                                     ' ',
+                                                                                     ' ',
+                                                                                     ' ',
+                                                                                 },
+            false },
+        { { ' ', ' ', 'X', ' ', 'O', 'X', ' ', ' ', ' ' }, { 0, 1, 3, 6, 7, 8 }, {
+                                                                                     ' ',
+                                                                                     ' ',
+                                                                                     'X',
+                                                                                     ' ',
+                                                                                     'O',
+                                                                                     'X',
+                                                                                     ' ',
+                                                                                     ' ',
+                                                                                     'O',
+                                                                                 },
+            false },
+        { { 'X', 'X', 'O', 'X', 'O', ' ', ' ', ' ', ' ' }, { 5, 6, 7, 8 }, {
+                                                                               'X',
+                                                                               'X',
+                                                                               'O',
+                                                                               'X',
+                                                                               'O',
+                                                                               ' ',
+                                                                               'O',
+                                                                               ' ',
+                                                                               ' ',
+                                                                           },
+            true },
+    };
+
+    for (const auto& t : tests) {
+        Game game(t.initialBoard, t.initialFreecells);
+        game.makeAImove();
+        QCOMPARE(game.dumpBoard(), t.expectedBoard);
+        const auto finished = game.isGameFinished();
+        QCOMPARE(t.expectedGameFinished, finished.first);
+    }
 }
 
 QTEST_MAIN(MatchDecision3x3)
