@@ -7,10 +7,30 @@ class MatchDecision3x3 : public QObject {
     Q_OBJECT
 
 private slots:
+    void firstMoveForAI();
     void only1moveToWin();
     void checkBestMoveAfterFirstMoveOfHuman();
     void preventHumanWin();
 };
+
+void MatchDecision3x3::firstMoveForAI()
+{
+    QList<QChar> board {
+        ' ', ' ', ' ',
+        ' ', ' ', ' ',
+        ' ', ' ', ' '
+    };
+    QList<quint8> freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    Game g(board, freeCells);
+    g.makeAImove();
+
+    board[4] = 'O';
+    auto output = g.dumpBoard();
+    QCOMPARE(output, board);
+
+    auto finished = g.isGameFinished();
+    QVERIFY(!finished.first);
+}
 
 void MatchDecision3x3::only1moveToWin()
 {
