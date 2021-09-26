@@ -12,6 +12,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_program(CLANG_TIDY_COMMAND NAMES clang-tidy)
+if (CLANG_TIDY_COMMAND)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND};--format-style=file")
+endif ()
+
 add_subdirectory(src)
 
 enable_testing()
