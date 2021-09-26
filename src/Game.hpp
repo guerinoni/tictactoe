@@ -22,8 +22,6 @@ public:
     void makeAImove();
     QPair<bool, GameFinished> isGameFinished();
 
-    QList<QChar> dumpBoard() const;
-
     static constexpr QChar kHumanSymbol { 'X' };
     static constexpr QChar kAiSymbol { 'O' };
 
@@ -55,4 +53,8 @@ private:
 
     CalculatedMove minVal(quint8 depth);
     CalculatedMove maxVal(quint8 depth);
+
+    QList<QChar> dumpBoard() const;
+
+    friend class MatchDecision3x3;
 };
