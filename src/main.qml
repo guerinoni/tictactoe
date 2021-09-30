@@ -4,7 +4,7 @@ import QtQuick.Controls 2.12
 
 import Game.enums 1.0
 
-Window {
+ApplicationWindow {
     visible: true
     color: "black"
     width: 640
@@ -30,6 +30,15 @@ Window {
             }
             gameFinishedPopup.open()
         }
+    }
+
+    menuBar: MenuBar {
+            Menu {
+                title: qsTr("Options")
+                Action { text: qsTr("New Match") }
+                MenuSeparator { }
+                Action { text: qsTr("Quit") }
+            }
     }
 
     Grid {
@@ -67,7 +76,7 @@ Window {
         height: 40
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.NoAutoClose
         contentItem: Text { id: gameFinishedText }
     }
 }
