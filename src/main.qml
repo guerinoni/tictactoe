@@ -13,10 +13,10 @@ Window {
 
     Connections {
         target: game
-        onAiElaborationFinished: {
+        function onAiElaborationFinished(cell) {
             cells.itemAt(cell).state = "O"
         }
-        onGameFinished: {
+        function onGameFinished(mode) {
             switch(mode)
             {
             case GameFinishedEnum.Human:
