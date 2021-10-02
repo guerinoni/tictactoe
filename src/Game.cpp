@@ -9,6 +9,16 @@ Game::Game(QList<QChar> board, QList<quint8> freeCells)
 {
 }
 
+void Game::emptyBoard(void)
+{
+    m_freeCells.clear();
+    for(int i=0; i < m_board.size(); i++)
+    {
+        m_freeCells.append(i);
+        m_board[i] = ' ';
+    }
+}
+
 bool Game::isMoveAllowed(quint8 cell)
 {
     return m_freeCells.contains(cell) && m_turn == Game::Turn::Human;
@@ -26,7 +36,6 @@ void Game::setHumanMove(quint8 cell)
         emit gameFinished(end.second);
         return;
     }
-
     makeAImove();
 }
 
