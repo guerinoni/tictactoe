@@ -90,7 +90,7 @@ ApplicationWindow {
         height: 40
         modal: true
         focus: true
-        closePolicy: Popup.NoAutoClose
+        closePolicy: Popup.CloseOnPressOutside
         contentItem: Text { id: gameFinishedText }
     }
 }

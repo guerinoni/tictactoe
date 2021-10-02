@@ -21,7 +21,7 @@ void Game::emptyBoard(void)
 
 bool Game::isMoveAllowed(quint8 cell)
 {
-    return m_freeCells.contains(cell) && m_turn == Game::Turn::Human;
+    return m_freeCells.contains(cell) && m_turn == Game::Turn::Human && !isGameFinished().first;
 }
 
 void Game::setHumanMove(quint8 cell)
@@ -29,13 +29,14 @@ void Game::setHumanMove(quint8 cell)
     auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
     m_freeCells.removeOne(*item);
     m_board[cell] = kHumanSymbol;
-    m_turn = Game::Turn::AI;
 
     auto end = isGameFinished();
     if (end.first) {
         emit gameFinished(end.second);
         return;
     }
+
+    m_turn = Game::Turn::AI;
     makeAImove();
 }
 
