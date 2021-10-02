@@ -11,6 +11,7 @@ public:
 
     Q_INVOKABLE bool isMoveAllowed(quint8 cell);
     Q_INVOKABLE void setHumanMove(quint8 cell);
+    Q_INVOKABLE void emptyBoard(void);
 
     enum class GameFinished {
         Human,

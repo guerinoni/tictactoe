@@ -35,9 +35,23 @@ ApplicationWindow {
     menuBar: MenuBar {
             Menu {
                 title: qsTr("Options")
-                Action { text: qsTr("New Match") }
+                Action {
+                    text: qsTr("New Match")
+                    onTriggered: {
+                        for (var i = 0; i < cells.count; i++) {
+                            cells.itemAt(i).state = "empty"
+                        }
+                        game.emptyBoard()
+                        gameFinishedPopup.close()
+                    }
+                }
                 MenuSeparator { }
-                Action { text: qsTr("Quit") }
+                Action {
+                    text: qsTr("Quit")
+                    onTriggered: {
+                        Qt.quit();
+                    }
+                }
             }
     }
 
