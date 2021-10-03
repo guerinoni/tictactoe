@@ -48,9 +48,7 @@ ApplicationWindow {
                 MenuSeparator { }
                 Action {
                     text: qsTr("Quit")
-                    onTriggered: {
-                        Qt.quit();
-                    }
+                    onTriggered: Qt.quit()
                 }
             }
     }
