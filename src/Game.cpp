@@ -11,12 +11,8 @@ Game::Game(QList<QChar> board, QList<quint8> freeCells)
 
 void Game::emptyBoard(void)
 {
-    m_freeCells.clear();
-    for(int i=0; i < m_board.size(); i++)
-    {
-        m_freeCells.append(i);
-        m_board[i] = ' ';
-    }
+    m_board = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
+    m_freeCells = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 }
 
 bool Game::isMoveAllowed(quint8 cell)
