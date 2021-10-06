@@ -17,14 +17,13 @@ ApplicationWindow {
             cells.itemAt(cell).state = "O"
         }
         function onGameFinished(mode) {
-            switch(mode)
-            {
+            switch (mode) {
             case GameFinishedEnum.Human:
                 gameFinishedText.text = "You win, good job"
-                break;
+                break
             case GameFinishedEnum.AI:
                 gameFinishedText.text = "AI wins :P"
-                break;
+                break
             default:
                 gameFinishedText.text = "No more moves available"
             }
@@ -33,24 +32,28 @@ ApplicationWindow {
     }
 
     menuBar: MenuBar {
-            Menu {
-                title: qsTr("Options")
-                Action {
-                    text: qsTr("New Match")
-                    onTriggered: {
-                        for (var i = 0; i < cells.count; i++) {
-                            cells.itemAt(i).state = "empty"
-                        }
-                        game.emptyBoard()
-                        gameFinishedPopup.close()
+        Menu {
+            title: qsTr("Options")
+            Action {
+                text: qsTr("New Match")
+                onTriggered: {
+                    for (var i = 0; i < cells.count; i++) {
+                        cells.itemAt(i).state = "empty"
                     }
-                }
-                MenuSeparator { }
-                Action {
-                    text: qsTr("Quit")
-                    onTriggered: Qt.quit()
+                    game.emptyBoard()
+                    gameFinishedPopup.close()
                 }
             }
+            MenuSeparator {}
+            Action {
+                text: qsTr("Quit")
+                shortcut: Shortcut {
+                    sequence: StandardKey.Quit
+                }
+
+                onTriggered: Qt.quit()
+            }
+        }
     }
 
     Grid {
@@ -70,14 +73,12 @@ ApplicationWindow {
                 width: board.width / 3
                 height: board.height / 3
                 onClicked: {
-                    if(game.isMoveAllowed(index))
-                    {
+                    if (game.isMoveAllowed(index)) {
                         state = "X"
                         game.setHumanMove(index)
                     }
                 }
             }
-
         }
     }
 
@@ -89,6 +90,8 @@ ApplicationWindow {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnPressOutside
-        contentItem: Text { id: gameFinishedText }
+        contentItem: Text {
+            id: gameFinishedText
+        }
     }
 }
