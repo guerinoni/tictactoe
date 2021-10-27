@@ -18,5 +18,5 @@ fi
 
 for OUTPUT in $(git ls-files -- '*.cpp' '*.hpp')
 do
-	"${CLANG_FORMAT}" -style=file -i $OUTPUT
+	"${CLANG_FORMAT}" -style=file -i "$OUTPUT"
 done

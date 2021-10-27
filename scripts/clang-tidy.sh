@@ -11,5 +11,5 @@ fi
 
 for OUTPUT in $(git ls-files -- '*.cpp' '*.hpp')
 do
-	"${CLANG_TIDY}" -p $1 $OUTPUT
+	"${CLANG_TIDY}" -p "$1" "$OUTPUT"
 done
