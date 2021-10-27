@@ -16,7 +16,7 @@ cd tictactoe
 mkdir build
 cd build
 cmake ..
-cmake -build .
+cmake --build .
 
 # if you want run tests
 ctest
