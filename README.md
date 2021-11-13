@@ -31,7 +31,7 @@ Run clang-format
 
 Run clang-tidy (pass build-dir-path)
 ```
-./scripts/clang-tidy.sh ./scripts/clang-tidy.sh <cmake_build_dir>
+./scripts/clang-tidy.sh <cmake_build_dir>
 ```
 
 
