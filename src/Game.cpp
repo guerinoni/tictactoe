@@ -161,7 +161,7 @@ Game::CalculatedMove Game::minVal(quint8 depth)
 
     auto min = std::numeric_limits<qint32>::max();
     auto freeCellsCpy = m_freeCells;
-    quint8 bestMoveIndex;
+    quint8 bestMoveIndex = 0;
     for (auto it = freeCellsCpy.begin(); it != freeCellsCpy.end(); ++it) {
         auto cell = *it;
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
@@ -191,7 +191,7 @@ Game::CalculatedMove Game::maxVal(quint8 depth)
 
     auto max = std::numeric_limits<qint32>::min();
     auto freeCellsCpy = m_freeCells;
-    quint8 bestMoveIndex;
+    quint8 bestMoveIndex = 0;
     for (auto it = freeCellsCpy.begin(); it != freeCellsCpy.end(); ++it) {
         auto cell = *it;
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);

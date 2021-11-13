@@ -8,6 +8,7 @@ class MatchDecision3x3 : public QObject {
 
 private slots:
     void firstMoveForAI();
+    void benchmarkFirstMoveForAI();
     void only1moveToWin();
     void checkBestMoveAfterFirstMoveOfHuman();
     void preventHumanWin();
@@ -30,6 +31,20 @@ void MatchDecision3x3::firstMoveForAI()
 
     auto finished = g.isGameFinished();
     QVERIFY(!finished.first);
+}
+
+void MatchDecision3x3::benchmarkFirstMoveForAI()
+{
+    QList<QChar> board {
+        ' ', ' ', ' ',
+        ' ', ' ', ' ',
+        ' ', ' ', ' '
+    };
+    QList<quint8> freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    Game g(board, freeCells);
+    QBENCHMARK(g.makeAImove());
+    //    MatchDecision3x3::benchmarkFirstMoveForAI: 32 msecs per iteration
+    //    (total: 63, iterations: 2)
 }
 
 void MatchDecision3x3::only1moveToWin()
