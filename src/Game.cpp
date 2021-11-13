@@ -38,7 +38,7 @@ void Game::setHumanMove(quint8 cell)
 
 void Game::makeAImove()
 {
-    auto bestMove = maxVal(5);
+    auto bestMove = maxVal(5, 0, 255);
     m_freeCells.removeOne(bestMove.index);
     m_board[bestMove.index] = kAiSymbol;
 
@@ -150,10 +150,14 @@ quint8 Game::possibleWinFor(Game::Turn player)
 // depth is how many move in advance we are trying to calculate.
 // If the game is finished the returned value is multiplied with the current depth where is found in order
 // have a different wight based on what depth found winner moves. (+1 because last depth is 0 and any number *0...)
-Game::CalculatedMove Game::minVal(quint8 depth)
+// alpha is the maximum found fo last two max evaluation, with this concept of alpha beta pruning we can stop search
+// for all depth of tree. (best option for max)
+// beta is the minimum found for last two min evaluation. (best option for min)
+Game::CalculatedMove Game::minVal(quint8 depth, quint8 alpha, quint8 beta)
 {
     auto finished = isGameFinished();
     if (finished.first)
+        // this allowa to prioritize an early win, without `(depth + 1) *` a win in 1 move and a win in 10 moves have same value for AI
         return CalculatedMove { (depth + 1) * evaluateWin(finished.second), 0 };
 
     if (depth == 0) // limit of max depth that can be calculated, return estimation of wins
@@ -167,20 +171,29 @@ Game::CalculatedMove Game::minVal(quint8 depth)
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
         m_freeCells.removeOne(*item);
         m_board[cell] = kHumanSymbol;
-        auto currentMove = maxVal(depth - 1);
+        auto currentMove = maxVal(depth - 1, alpha, beta);
         if (currentMove.value < min) {
             min = currentMove.value;
             bestMoveIndex = cell;
         }
 
+        if (min < beta) {
+            beta = min;
+        }
+
         m_board[cell] = ' ';
         m_freeCells.push_back(cell);
+
+        // alpha pruning
+        if (min <= alpha) {
+            break;
+        }
     }
 
     return { min, bestMoveIndex };
 }
 
-Game::CalculatedMove Game::maxVal(quint8 depth)
+Game::CalculatedMove Game::maxVal(quint8 depth, quint8 alpha, quint8 beta)
 {
     auto finished = isGameFinished();
     if (finished.first)
@@ -197,14 +210,23 @@ Game::CalculatedMove Game::maxVal(quint8 depth)
         auto item = std::find(m_freeCells.begin(), m_freeCells.end(), cell);
         m_freeCells.removeOne(*item);
         m_board[cell] = kAiSymbol;
-        auto currentMove = minVal(depth - 1);
+        auto currentMove = minVal(depth - 1, alpha, beta);
         if (currentMove.value > max) {
             max = currentMove.value;
             bestMoveIndex = cell;
         }
 
+        if (max > alpha) {
+            alpha = max;
+        }
+
         m_board[cell] = ' ';
         m_freeCells.push_back(cell);
+
+        // beta pruning
+        if (max >= beta) {
+            break;
+        }
     }
 
     return { max, bestMoveIndex };

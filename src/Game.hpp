@@ -52,8 +52,8 @@ private:
         quint8 index;
     };
 
-    CalculatedMove minVal(quint8 depth);
-    CalculatedMove maxVal(quint8 depth);
+    CalculatedMove minVal(quint8 depth, quint8 alpha, quint8 beta);
+    CalculatedMove maxVal(quint8 depth, quint8 alpha, quint8 beta);
 
     QList<QChar> dumpBoard() const;
 
