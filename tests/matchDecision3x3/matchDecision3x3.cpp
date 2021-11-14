@@ -1,4 +1,4 @@
-#include "../src/Game.hpp"
+#include "../../src/Game.hpp"
 
 #include <QtDebug>
 #include <QtTest>
@@ -144,5 +144,5 @@ void MatchDecision3x3::preventHumanWin()
     }
 }
 
-QTEST_MAIN(MatchDecision3x3)
+QTEST_APPLESS_MAIN(MatchDecision3x3)
 #include "matchDecision3x3.moc"
