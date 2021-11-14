@@ -3,16 +3,31 @@
 #include <QRandomGenerator>
 #include <QtDebug>
 
+Game::Game()
+{
+    emptyBoard();
+}
+
 Game::Game(QList<QChar> board, QList<quint8> freeCells)
     : m_board { std::move(board) }
     , m_freeCells { std::move(freeCells) }
 {
 }
 
+Game::Game(quint8 rows, quint8 column, quint8 consecutiveForWin)
+    : m_rows { rows }
+    , m_columns { column }
+    , m_consecutiveForWin { consecutiveForWin }
+{
+    emptyBoard();
+}
+
 void Game::emptyBoard(void)
 {
-    m_board = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
-    m_freeCells = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    for (int i = 0; i < m_rows * m_columns; ++i) {
+        m_board.append(' ');
+        m_freeCells.append(i);
+    }
 }
 
 bool Game::isMoveAllowed(quint8 cell)

@@ -6,8 +6,9 @@ class Game : public QObject {
     Q_OBJECT
 
 public:
-    Game() = default;
+    Game();
     explicit Game(QList<QChar> board, QList<quint8> freeCells);
+    explicit Game(quint8 rows, quint8 column, quint8 consecutiveForWin);
 
     Q_INVOKABLE bool isMoveAllowed(quint8 cell);
     Q_INVOKABLE void setHumanMove(quint8 cell);
@@ -36,8 +37,11 @@ private:
         AI
     };
 
-    QList<QChar> m_board { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
-    QList<quint8> m_freeCells { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    quint8 m_rows { 3 };
+    quint8 m_columns { 3 };
+    quint8 m_consecutiveForWin { 3 };
+    QList<QChar> m_board;
+    QList<quint8> m_freeCells;
     Game::Turn m_turn = Game::Turn::Human;
 
     qint32 evaluateMove();
