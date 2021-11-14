@@ -3,7 +3,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
-        qml.qrc
+        ${PROJECT_SOURCE_DIR}/qml/qml.qrc
+        ${PROJECT_SOURCE_DIR}/resources/resources.qrc
         Game.cpp
         Game.hpp
 )
